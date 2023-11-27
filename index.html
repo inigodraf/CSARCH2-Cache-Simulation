@@ -28,12 +28,16 @@
         <div class="flex flex-col justify-center">
             <table class="text-center">
                 <tr>
-                    <td> Block Size </td>
+                    <td> Cache Blocks </td>
+                    <td> Cache Line </td>
                     <td> Set Size </td>
                     <td> Main Memory Size </td>
-                    <td> Cache Memory Size </td>
                 </tr>
                 <tr>
+                    <td class="border-black border p-1">
+                        <input id="cm-size" class="w-[5.5rem] text-center outline-none" type="number" placeholder="Input Here" min="1" step="1" value="16">
+                        <span class="w-18">Blocks</span>
+                    </td>
                     <td class="border-black border p-1">
                         <input id="block-size" class="w-[5.5rem] text-center outline-none" type="number" placeholder="Input Here" min="1" step="1" value="16">
                         <span class="w-18">Words</span>
@@ -43,28 +47,14 @@
                         <span class="w-18">Blocks</span>
                     </td>
                     <td class="border-black border p-1">
-                        <input id="mm-size" class="w-[5.5rem] text-center outline-none" type="number" placeholder="Input Here" min="1" step="1" value="1024">
-                        <select class="w-18" name="mm-size-type" id="mm-size-type">
-                            <option value="1">Words</option>
-                            <option value="0">Blocks</option>
-                        </select>
-                    </td>
-                    <td class="border-black border p-1">
-                        <input id="cm-size" class="w-[5.5rem] text-center outline-none" type="number" placeholder="Input Here" min="1" step="1" value="256">
-                        <select class="w-18" name="cm-size-type" id="cm-size-type">
-                            <option value="1">Words</option>
-                            <option value="0">Blocks</option>
-                        </select>
+                        <input id="mm-size" class="w-[5.5rem] text-center outline-none" type="number" placeholder="Input Here" min="1" step="1" value="">
+                        <span class="w-18">Blocks</span>
                     </td>
                 </tr>
             </table>
         </div>
         <div class="flex items-center">
-            Memory Sequence in
-            <select class="py-1" name="seq-type" id="seq-type">
-                <option value="words">Words</option>
-                <option value="blocks">Blocks</option>
-            </select>
+            Memory Sequence in Blocks
         </div>
         <textarea class="border-black border w-full" rows="1" name="mem-seq" id="mem-seq" placeholder="Use comma separated values (i.e. 0, 1, 2, 3,...)"></textarea>
         <div class="flex flex-row">
@@ -72,10 +62,17 @@
             <button id="step" class="border-black border px-2 mx-1 rounded-md">Step</button>
             <button id="reset" class="border-black border px-2 mx-1 rounded-md">Reset</button>
         </div>
-        <table class="border-collapse border-spacing-0 grow-0">
-            <tbody id="snapshot">
-            </tbody>
-        </table>
+        <div class="flex flex-row items-start">
+            <table>
+                <tbody id="seq-table">
+                </tbody>
+            </table>
+            <table class="border-collapse border-spacing-0 grow-0">
+                <tbody id="snapshot">
+                </tbody>
+            </table>
+
+        </div>
     </div>
 </body>
 </html>
