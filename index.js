@@ -3,6 +3,9 @@
 let cache = null
 let isInitialized = false
 
+let cache_blocks = 0
+let mem_blocks = 0
+
 let mem_seq = null
 let step_ctr = 0
 let hit_count = 0
@@ -36,6 +39,19 @@ document.addEventListener('DOMContentLoaded', e => {
         cache = null
         step_ctr = 0
     })
+
+    document.getElementById('test-a').addEventListener('click', e => {
+        initialize()
+        document.getElementById('mem-seq').value = generateTestCases('a')
+    })
+    document.getElementById('test-b').addEventListener('click', e => {
+        initialize()
+        document.getElementById('mem-seq').value = generateTestCases('b')
+    })
+    document.getElementById('test-c').addEventListener('click', e => {
+        initialize()
+        document.getElementById('mem-seq').value = generateTestCases('c')
+    })
 })
 
 function step(skip = true) {
@@ -53,8 +69,8 @@ function step(skip = true) {
 function initialize() {
     const block_size = parseInt(document.getElementById('block-size').value)
     const set_size = parseInt(document.getElementById('set-size').value)
-    let mm_size = parseInt(document.getElementById('mm-size').value)
-    let cm_size = parseInt(document.getElementById('cm-size').value)
+    mem_blocks = parseInt(document.getElementById('mm-size').value)
+    cache_blocks = parseInt(document.getElementById('cm-size').value)
     mem_seq = parseCSV(document.getElementById('mem-seq').value)
     document.getElementById('snapshot').innerHTML = '<tr><td>Set</td><td>Block</td><td>Stored</td><td>Time</td></tr>'
     document.getElementById('seq-table').innerHTML = ''
@@ -62,7 +78,7 @@ function initialize() {
     hit_count = 0
     miss_count = 0
 
-    cache = new Cache(cm_size, set_size)
+    cache = new Cache(cache_blocks, set_size)
 
     createSequenceUI()
 
@@ -83,6 +99,34 @@ function createSequenceUI() {
         html += `<tr>\n<td>${mem_seq[i]}</td>\n<td id='${i}-hit'></td>\n<td id='${i}-miss'></td></tr>`
     }
     read_seq.innerHTML += html
+}
+
+function generateTestCases(key = 'a') {
+    let seq = ''
+    switch (key) {
+        case 'a':
+            for (let i = 0; i < 4; i++)
+                for (let j = 0; j < 2 * cache_blocks; j++)
+                    seq += j.toString() + ', '
+            break;
+        case 'b':
+            for (let i = 0; i < 4 * cache_blocks; i++) {
+                seq += Math.floor(Math.random() * mem_blocks) + ', '
+            }
+            break;
+        case 'c':
+            for (let i = 0; i < 4; i++) {
+                seq += 0 + ', '
+
+                for (let j = 0; j < 2; j++)
+                    for (let k = 1; k < cache_blocks - 1; k++)
+                        seq += k + ', '
+                for (let j = cache_blocks - 1; j < 2 * cache_blocks; j++)
+                    seq += j + ', '
+            }
+            break;
+    }
+    return seq.slice(0, -2)
 }
 
 class Cache {
